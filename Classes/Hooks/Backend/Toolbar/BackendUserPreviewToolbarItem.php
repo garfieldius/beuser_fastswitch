@@ -18,41 +18,24 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 class BackendUserPreviewToolbarItem implements ToolbarItemInterface
 {
     /**
-     * @var BackendUserRepository
-     */
-    private $backendUserRepository;
-
-    /**
-     * @var PageRenderer
-     */
-    protected PageRenderer $pageRenderer;
-
-    /**
-     * @var QueryResultInterface|null
-     */
-    protected $availableUsers = null;
-
-    /**
      * Constructor
      */
     public function __construct(
-        BackendUserRepository $backendUserRepository,
-        PageRenderer $pageRenderer
-        ) {
-            $this->backendUserRepository = $backendUserRepository;
-            $this->loadAvailableBeUsers();
-            $pageRenderer->loadRequireJsModule('TYPO3/CMS/BeuserFastswitch/BeuserFastswitch');
-            $this->pageRenderer = $pageRenderer;
+        private readonly BackendUserRepository $backendUserRepository,
+        private readonly PageRenderer $pageRenderer,
+    ) {
     }
 
     /**
      * Loads all eligible backend users
      */
-    public function loadAvailableBeUsers(): void
+    public function loadAvailableBeUsers(): array
     {
         if ($this->checkAccess()) {
-            $this->availableUsers = $this->getBackendUserRows();
+            return $this->backendUserRepository->findNonAdmins()->toArray();
         }
+
+        return [];
     }
 
     /**
@@ -78,6 +61,9 @@ class BackendUserPreviewToolbarItem implements ToolbarItemInterface
      */
     public function getItem(): string
     {
+        $this->pageRenderer->loadJavaScriptModule('@josefglatz/beuser-fastswitch/dropdown.js');
+        $this->pageRenderer->addCssFile('EXT:beuser_fastswitch/Resources/Public/Css/beuser_fastswitch.css');
+
         return $this->getFluidTemplateObject('ToolbarItem.html')->render();
     }
 
@@ -91,7 +77,7 @@ class BackendUserPreviewToolbarItem implements ToolbarItemInterface
     {
         $view = $this->getFluidTemplateObject('DropDown.html');
         $view->assignMultiple([
-            'users' => $this->availableUsers,
+            'users' => $this->loadAvailableBeUsers(),
         ]);
         return $view->render();
     }
@@ -153,28 +139,10 @@ class BackendUserPreviewToolbarItem implements ToolbarItemInterface
             'EXT:beuser_fastswitch/Resources/Private/Partials'
         ]);
         $view->setTemplateRootPaths(['EXT:beuser_fastswitch/Resources/Private/Templates']);
-
         $view->setTemplate($filename);
+        $view->setRequest($GLOBALS['TYPO3_REQUEST']);
 
-        $view->getRequest()->setControllerExtensionName('BeuserFastswitch');
         return $view;
-    }
-
-    /**
-     * Retrieve available backend users
-     *
-     * @return QueryResultInterface|null
-     * @throws InvalidQueryException
-     */
-    protected function getBackendUserRows(): ?QueryResultInterface
-    {
-        $rows = $this->backendUserRepository->findNonAdmins();
-
-        if ($rows instanceof QueryResultInterface) {
-            return $rows;
-        }
-
-        return null;
     }
 
     protected function getBackendUser(): BackendUserAuthentication

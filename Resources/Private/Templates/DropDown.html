@@ -3,9 +3,9 @@
 			data-namespace-typo3-fluid="true">
 
 <h3 class="dropdown-headline">
-	{f:translate(key: 'toolbar.beuser.fastswitch.dropdown.title')}
+	{f:translate(key: 'toolbar.beuser.fastswitch.dropdown.title', extensionName: 'BeuserFastswitch')}
 </h3>
-<hr>
+<hr class="dropdown-divider" aria-hidden="true">
 <f:if condition="{users}">
 	<f:then>
 		<form action="" role="search" name="beuser-fastswitch-search" id="beuser-fastswitch-search-form">
@@ -18,9 +18,9 @@
 						<input
 							type="text"
 							class="form-control t3js-clearable"
-							placeholder="{f:translate(key: 'toolbar.beuser.fastswitch.dropdown.search.placeholder')}"
+							placeholder="{f:translate(key: 'toolbar.beuser.fastswitch.dropdown.search.placeholder', extensionName: 'BeuserFastswitch')}"
 							id="beuser-fastswitch-search-mask"
-							title="{f:translate(key: 'toolbar.beuser.fastswitch.dropdown.search.title')}"
+							title="{f:translate(key: 'toolbar.beuser.fastswitch.dropdown.search.title', extensionName: 'BeuserFastswitch')}"
 							autocomplete="off"/>
 					</div>
 				</div>
@@ -33,8 +33,8 @@
 		</div>
 	</f:then>
 	<f:else>
-		<p>
-			{f:translate(key: 'toolbar.beuser.fastswitch.dropdown.noUsers')}
+		<p class="dropdown-item">
+			{f:translate(key: 'toolbar.beuser.fastswitch.dropdown.noUsers', extensionName: 'BeuserFastswitch')}
 		</p>
 	</f:else>
 </f:if>

@@ -3,8 +3,10 @@
 	overflow-y: auto;
 	max-height: 70vh;
 	box-sizing: border-box;
+	padding: var(--typo3-list-item-padding-y) var(--typo3-list-item-padding-x);
 }
 #beuser-fastswitch-search-form {
+	padding: var(--typo3-list-item-padding-y) var(--typo3-list-item-padding-x);
 	margin-bottom: 15px;
 }
 .beuser-fastswitch__useritem {
