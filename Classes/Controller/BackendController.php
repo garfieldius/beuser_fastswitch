@@ -63,7 +63,7 @@ class BackendController extends ActionController
         $view->setPartialRootPaths([
             GeneralUtility::getFileAbsFileName('EXT:beuser_fastswitch/Resources/Private/Partials'),
         ]);
-        $view->getRequest()->setControllerExtensionName('BeuserFastswitch');
+        $view->setRequest($GLOBALS['TYPO3_REQUEST']);
         $view->getRenderingContext()->setControllerName(__CLASS__);
         $view->getRenderingContext()->setControllerAction('userLookup');
 
