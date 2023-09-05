@@ -1,4 +1,6 @@
-define(['jquery'], function ($) {
+import $ from "jquery";
+
+(function () {
   var BeuserFastswitch = {};
 
   BeuserFastswitch.init = function () {
@@ -45,5 +47,4 @@ define(['jquery'], function ($) {
 
   BeuserFastswitch.init();
 
-  return BeuserFastswitch;
-});
+})();
